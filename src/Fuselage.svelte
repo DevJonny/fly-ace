@@ -76,7 +76,7 @@
           class="flex items-center justify-center gap-2 bg-stone-300 hover:bg-stone-400 border-2 border-stone-800 text-stone-900 px-3 py-2 rounded-sm font-bold uppercase tracking-wider shadow-[2px_2px_0_rgba(28,25,23,1)] transition-transform active:translate-y-[2px] active:shadow-none text-sm md:text-base"
         >
           <span class="text-lg md:text-xl leading-none">{emoji}</span>
-          <span>Log {label}</span>
+          <span>{label}</span>
         </button>
       {/each}
       
