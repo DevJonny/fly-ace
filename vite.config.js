@@ -18,5 +18,5 @@ export default defineConfig({
       }
     })
   ],
-  base: './' // Use relative paths for GitHub pages
+  base: '/fly-ace/' // Explicitly set for GitHub pages to prevent trailing slash issues
 });

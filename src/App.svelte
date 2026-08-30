@@ -14,7 +14,7 @@
   let newType = 'spitfire';
   let newGender = 'male';
 
-  $: previewImage = `plane_${newType}_${newGender}.jpg`;
+  $: previewImage = `${import.meta.env.BASE_URL}plane_${newType}_${newGender}.jpg`;
 
   onMount(() => {
     // Check if URL contains a shared fleet
