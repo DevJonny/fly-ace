@@ -114,9 +114,9 @@
     </div>
   {/if}
 
-  <div class="space-y-10">
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 md:gap-12">
     {#if (isReadOnly ? sharedFuselages : $fuselages).length === 0}
-      <div class="text-center text-stone-600 py-16 bg-stone-200 rounded-sm border-2 border-stone-400 border-dashed uppercase tracking-widest font-bold">
+      <div class="col-span-full text-center text-stone-600 py-16 bg-stone-200 rounded-sm border-2 border-stone-400 border-dashed uppercase tracking-widest font-bold">
         NO AIRCRAFT DEPLOYED.
       </div>
     {/if}

@@ -39,7 +39,7 @@
   $: bgImage = `${import.meta.env.BASE_URL}plane_${fuselage.aircraftType || 'spitfire'}_${fuselage.pilotGender || 'male'}.jpg`;
 </script>
 
-<div class="bg-stone-100 rounded-sm mb-12 relative overflow-hidden border-4 border-stone-800 shadow-[6px_6px_0_rgba(28,25,23,1)]">
+<div class="bg-stone-100 rounded-sm relative overflow-hidden border-4 border-stone-800 shadow-[6px_6px_0_rgba(28,25,23,1)] h-full flex flex-col">
   <div class="p-4 bg-stone-300 border-b-4 border-stone-800 flex justify-between items-center">
     <h2 class="text-2xl md:text-3xl font-black uppercase tracking-widest text-stone-900">{fuselage.name}</h2>
     {#if !isReadOnly}
@@ -48,7 +48,7 @@
   </div>
   
   <!-- Fuselage Image Container -->
-  <div class="relative w-full aspect-[4/3] sm:aspect-[2/1] md:aspect-[2.5/1] bg-stone-400 overflow-hidden border-b-4 border-stone-800">
+  <div class="relative w-full aspect-[4/3] sm:aspect-[2/1] md:aspect-[2.5/1] bg-stone-400 overflow-hidden border-b-4 border-stone-800 flex-grow">
     <!-- The generated image -->
     <img 
       src={bgImage} 
