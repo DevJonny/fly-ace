@@ -40,8 +40,13 @@
 </script>
 
 <div class="bg-stone-100 rounded-sm relative overflow-hidden border-4 border-stone-800 shadow-[6px_6px_0_rgba(28,25,23,1)] h-full flex flex-col">
-  <div class="p-4 bg-stone-300 border-b-4 border-stone-800 flex justify-between items-center">
-    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-widest text-stone-900">{fuselage.name}</h2>
+  <div class="p-4 bg-stone-300 border-b-4 border-stone-800 flex justify-between items-center gap-2">
+    <div class="flex items-center gap-3 flex-wrap">
+      <h2 class="text-2xl md:text-3xl font-black uppercase tracking-widest text-stone-900 leading-none">{fuselage.name}</h2>
+      {#if allMarkings.length >= 5}
+        <span class="bg-red-700 text-stone-100 px-2 py-0.5 text-xs md:text-sm font-black uppercase tracking-widest rounded-sm border-2 border-stone-800 shadow-[2px_2px_0_rgba(28,25,23,1)] -rotate-3 mt-1">ACE</span>
+      {/if}
+    </div>
     {#if !isReadOnly}
       <button on:click={remove} class="text-stone-800 hover:text-red-700 font-bold px-3 py-1 text-sm uppercase tracking-wider border-2 border-transparent hover:border-red-700 rounded-sm transition-colors" title="Decommission Aircraft">Decommission</button>
     {/if}
