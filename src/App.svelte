@@ -9,7 +9,7 @@
   // Dialog State
   let showDialog = false;
   let newName = '';
-  let newType = 'green';
+  let newType = 'spitfire';
   let newGender = 'male';
 
   $: previewImage = `plane_${newType}_${newGender}.jpg`;
@@ -113,13 +113,13 @@
             <label class="block text-sm font-bold uppercase tracking-wider text-stone-700 mb-2">Aircraft Model</label>
             <div class="flex flex-col gap-3">
               <label class="flex items-center gap-3 cursor-pointer p-3 bg-stone-200 border-2 border-stone-300 rounded-sm hover:border-stone-500 has-[:checked]:border-stone-800 has-[:checked]:bg-stone-300 font-bold text-sm">
-                <input type="radio" bind:group={newType} value="green" class="w-5 h-5 accent-stone-800" /> Army Green
+                <input type="radio" bind:group={newType} value="spitfire" class="w-5 h-5 accent-stone-800" /> Supermarine Spitfire
               </label>
               <label class="flex items-center gap-3 cursor-pointer p-3 bg-stone-200 border-2 border-stone-300 rounded-sm hover:border-stone-500 has-[:checked]:border-stone-800 has-[:checked]:bg-stone-300 font-bold text-sm">
-                <input type="radio" bind:group={newType} value="blue" class="w-5 h-5 accent-stone-800" /> Navy Blue
+                <input type="radio" bind:group={newType} value="hurricane" class="w-5 h-5 accent-stone-800" /> Hawker Hurricane
               </label>
               <label class="flex items-center gap-3 cursor-pointer p-3 bg-stone-200 border-2 border-stone-300 rounded-sm hover:border-stone-500 has-[:checked]:border-stone-800 has-[:checked]:bg-stone-300 font-bold text-sm">
-                <input type="radio" bind:group={newType} value="silver" class="w-5 h-5 accent-stone-800" /> Silver Bomber
+                <input type="radio" bind:group={newType} value="lancaster" class="w-5 h-5 accent-stone-800" /> Avro Lancaster (Bomber)
               </label>
             </div>
           </div>

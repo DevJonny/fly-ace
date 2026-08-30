@@ -19,7 +19,7 @@ function createFuselagesStore() {
 
   return {
     subscribe,
-    addFuselage: (name, aircraftType = 'green', pilotGender = 'male') => {
+    addFuselage: (name, aircraftType = 'spitfire', pilotGender = 'male') => {
       update(list => {
         const newList = [...list, { id: crypto.randomUUID(), name, aircraftType, pilotGender, markings: { fly: 0, wasp: 0, hornet: 0 } }];
         triggerSync(newList);

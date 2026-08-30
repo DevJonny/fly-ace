@@ -31,8 +31,8 @@
   $: orderedTypes = fuselage.history && fuselage.history.length > 0 ? fuselage.history : fallbackMarkings;
   $: allMarkings = orderedTypes.map(t => markingTypes.find(m => m.id === t)?.emoji).filter(Boolean);
 
-  // Default to green male if older save data doesn't have aircraftType/pilotGender
-  $: bgImage = `plane_${fuselage.aircraftType || 'green'}_${fuselage.pilotGender || 'male'}.jpg`;
+  // Default to spitfire male if older save data doesn't have aircraftType/pilotGender
+  $: bgImage = `plane_${fuselage.aircraftType || 'spitfire'}_${fuselage.pilotGender || 'male'}.jpg`;
 </script>
 
 <div class="bg-stone-100 rounded-sm mb-12 relative overflow-hidden border-4 border-stone-800 shadow-[6px_6px_0_rgba(28,25,23,1)]">
@@ -47,13 +47,13 @@
     <img 
       src={bgImage} 
       alt="Airplane Fuselage" 
-      class="absolute inset-0 w-full h-full object-cover {fuselage.aircraftType === 'blue' ? 'object-[20%_center] scale-[1.7]' : 'object-center'}" 
+      class="absolute inset-0 w-full h-full object-cover {fuselage.aircraftType === 'hurricane' || fuselage.aircraftType === 'blue' ? 'object-[20%_center] scale-[1.7]' : 'object-center'}" 
     />
     
     <!-- Overlay for Markings -->
     <div class="absolute inset-0 flex items-center justify-start pointer-events-none">
        <!-- Grid for the markings, simulating stencil painting on the side of the fuselage. -->
-       <div class="grid grid-rows-3 grid-flow-col gap-x-1 sm:gap-x-2 gap-y-0 {fuselage.aircraftType === 'blue' ? 'ml-[18%] md:ml-[22%]' : 'ml-[8%] md:ml-[12%]'} h-auto justify-start content-start">
+       <div class="grid grid-rows-3 grid-flow-col gap-x-1 sm:gap-x-2 gap-y-0 {fuselage.aircraftType === 'hurricane' || fuselage.aircraftType === 'blue' ? 'ml-[18%] md:ml-[22%]' : 'ml-[8%] md:ml-[12%]'} h-auto justify-start content-start">
          {#each allMarkings as emoji}
            <span class="text-sm sm:text-base md:text-lg filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] leading-none flex items-center justify-center">{emoji}</span>
          {/each}
