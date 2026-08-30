@@ -1,6 +1,7 @@
 <script>
   import { fuselages } from './store.js';
   export let fuselage;
+  export let isReadOnly = false;
 
   const markingTypes = [
     { id: 'fly', emoji: '🪰', label: 'Fly' },
@@ -9,14 +10,17 @@
   ];
 
   function addMark(type) {
+    if (isReadOnly) return;
     fuselages.addMarking(fuselage.id, type);
   }
 
   function remove() {
+    if (isReadOnly) return;
     fuselages.removeFuselage(fuselage.id);
   }
 
   function undoMark() {
+    if (isReadOnly) return;
     fuselages.undoLastMarking(fuselage.id);
   }
 
@@ -38,7 +42,9 @@
 <div class="bg-stone-100 rounded-sm mb-12 relative overflow-hidden border-4 border-stone-800 shadow-[6px_6px_0_rgba(28,25,23,1)]">
   <div class="p-4 bg-stone-300 border-b-4 border-stone-800 flex justify-between items-center">
     <h2 class="text-2xl md:text-3xl font-black uppercase tracking-widest text-stone-900">{fuselage.name}</h2>
-    <button on:click={remove} class="text-stone-800 hover:text-red-700 font-bold px-3 py-1 text-sm uppercase tracking-wider border-2 border-transparent hover:border-red-700 rounded-sm transition-colors" title="Decommission Aircraft">Decommission</button>
+    {#if !isReadOnly}
+      <button on:click={remove} class="text-stone-800 hover:text-red-700 font-bold px-3 py-1 text-sm uppercase tracking-wider border-2 border-transparent hover:border-red-700 rounded-sm transition-colors" title="Decommission Aircraft">Decommission</button>
+    {/if}
   </div>
   
   <!-- Fuselage Image Container -->
@@ -61,26 +67,28 @@
     </div>
   </div>
 
-  <!-- Controls -->
-  <div class="p-4 md:p-6 bg-stone-200 flex flex-wrap gap-4 justify-center items-center">
-    {#each markingTypes as {id, emoji, label}}
+  {#if !isReadOnly}
+    <!-- Controls -->
+    <div class="p-4 md:p-6 bg-stone-200 flex flex-wrap gap-4 justify-center items-center">
+      {#each markingTypes as {id, emoji, label}}
+        <button 
+          on:click={() => addMark(id)}
+          class="flex items-center gap-3 bg-stone-300 hover:bg-stone-400 border-2 border-stone-800 text-stone-900 px-6 py-3 rounded-sm font-black uppercase tracking-widest shadow-[3px_3px_0_rgba(28,25,23,1)] transition-transform active:translate-y-1 active:shadow-none"
+        >
+          <span class="text-2xl leading-none">{emoji}</span>
+          <span>Log {label}</span>
+        </button>
+      {/each}
+      
       <button 
-        on:click={() => addMark(id)}
-        class="flex items-center gap-3 bg-stone-300 hover:bg-stone-400 border-2 border-stone-800 text-stone-900 px-6 py-3 rounded-sm font-black uppercase tracking-widest shadow-[3px_3px_0_rgba(28,25,23,1)] transition-transform active:translate-y-1 active:shadow-none"
+        on:click={undoMark}
+        disabled={allMarkings.length === 0}
+        class="flex items-center gap-2 bg-stone-100 hover:bg-red-100 border-2 border-stone-800 text-stone-800 px-4 py-3 rounded-sm font-bold uppercase tracking-wider shadow-[3px_3px_0_rgba(28,25,23,1)] transition-transform active:translate-y-1 active:shadow-none disabled:opacity-50 disabled:shadow-none disabled:translate-y-1 ml-4"
+        title="Undo Last Mark"
       >
-        <span class="text-2xl leading-none">{emoji}</span>
-        <span>Log {label}</span>
+        <span class="text-xl">↩</span>
+        <span>Undo</span>
       </button>
-    {/each}
-    
-    <button 
-      on:click={undoMark}
-      disabled={allMarkings.length === 0}
-      class="flex items-center gap-2 bg-stone-100 hover:bg-red-100 border-2 border-stone-800 text-stone-800 px-4 py-3 rounded-sm font-bold uppercase tracking-wider shadow-[3px_3px_0_rgba(28,25,23,1)] transition-transform active:translate-y-1 active:shadow-none disabled:opacity-50 disabled:shadow-none disabled:translate-y-1 ml-4"
-      title="Undo Last Mark"
-    >
-      <span class="text-xl">↩</span>
-      <span>Undo</span>
-    </button>
-  </div>
+    </div>
+  {/if}
 </div>

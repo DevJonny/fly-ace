@@ -5,6 +5,8 @@
   import Fuselage from './Fuselage.svelte';
 
   let isAuth = false;
+  let isReadOnly = false;
+  let sharedFuselages = null;
 
   // Dialog State
   let showDialog = false;
@@ -15,13 +17,37 @@
   $: previewImage = `plane_${newType}_${newGender}.jpg`;
 
   onMount(() => {
-    initDriveAuth((authStatus) => {
-      isAuth = authStatus;
-      if (isAuth) {
-        fuselages.syncFromDrive();
+    // Check if URL contains a shared fleet
+    const urlParams = new URLSearchParams(window.location.search);
+    const fleetData = urlParams.get('fleet');
+    
+    if (fleetData) {
+      try {
+        sharedFuselages = JSON.parse(decodeURIComponent(atob(fleetData)));
+        isReadOnly = true;
+      } catch (e) {
+        console.error("Failed to parse shared fleet data", e);
       }
-    });
+    }
+
+    if (!isReadOnly) {
+      initDriveAuth((authStatus) => {
+        isAuth = authStatus;
+        if (isAuth) {
+          fuselages.syncFromDrive();
+        }
+      });
+    }
   });
+
+  function shareFleet() {
+    const encoded = btoa(encodeURIComponent(JSON.stringify($fuselages)));
+    const url = new URL(window.location.href);
+    url.search = `?fleet=${encoded}`;
+    navigator.clipboard.writeText(url.toString()).then(() => {
+      alert("Share link copied to clipboard!");
+    });
+  }
 
   function openDialog() {
     newName = '';
@@ -54,33 +80,48 @@
       </div>
       Fly Ace
     </h1>
-    <div>
-      {#if isAuth}
-        <button on:click={logout} class="bg-stone-300 hover:bg-stone-400 border-2 border-stone-800 text-stone-800 font-bold px-4 py-2 rounded-sm shadow-[2px_2px_0_rgba(28,25,23,1)] transition-transform active:translate-y-1 active:shadow-none uppercase text-sm tracking-wider">
-          Disconnect Drive
+    <div class="flex gap-2">
+      {#if isReadOnly}
+        <button on:click={() => window.location.search = ''} class="bg-blue-800 hover:bg-blue-900 border-2 border-stone-800 text-stone-100 font-bold px-4 py-2 rounded-sm shadow-[2px_2px_0_rgba(28,25,23,1)] transition-transform active:translate-y-1 active:shadow-none uppercase text-sm tracking-wider">
+          Create Your Own Fleet
         </button>
       {:else}
-        <button on:click={login} class="bg-[#4c5c44] hover:bg-[#3d4a36] border-2 border-stone-800 text-[#e6e4d5] font-bold px-4 py-2 rounded-sm shadow-[2px_2px_0_rgba(28,25,23,1)] transition-transform active:translate-y-1 active:shadow-none uppercase text-sm tracking-wider">
-          Sync to Google Drive
+        <button on:click={shareFleet} class="bg-stone-300 hover:bg-stone-400 border-2 border-stone-800 text-stone-800 font-bold px-4 py-2 rounded-sm shadow-[2px_2px_0_rgba(28,25,23,1)] transition-transform active:translate-y-1 active:shadow-none uppercase text-sm tracking-wider">
+          Share Fleet
         </button>
+        {#if isAuth}
+          <button on:click={logout} class="bg-stone-300 hover:bg-stone-400 border-2 border-stone-800 text-stone-800 font-bold px-4 py-2 rounded-sm shadow-[2px_2px_0_rgba(28,25,23,1)] transition-transform active:translate-y-1 active:shadow-none uppercase text-sm tracking-wider">
+            Disconnect
+          </button>
+        {:else}
+          <button on:click={login} class="bg-[#4c5c44] hover:bg-[#3d4a36] border-2 border-stone-800 text-[#e6e4d5] font-bold px-4 py-2 rounded-sm shadow-[2px_2px_0_rgba(28,25,23,1)] transition-transform active:translate-y-1 active:shadow-none uppercase text-sm tracking-wider">
+            Sync to Google Drive
+          </button>
+        {/if}
       {/if}
     </div>
   </header>
 
-  <div class="mb-12 text-center">
-    <button on:click={openDialog} class="bg-[#4c5c44] hover:bg-[#3d4a36] border-2 border-stone-900 text-[#e6e4d5] px-10 py-4 rounded-sm font-black uppercase tracking-widest shadow-[4px_4px_0_rgba(28,25,23,1)] text-xl transition-transform active:translate-y-1 active:shadow-none">
-      + Requisition Aircraft
-    </button>
-  </div>
+  {#if isReadOnly}
+    <div class="mb-8 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-900 font-bold uppercase tracking-wider shadow-md">
+      Read-Only Mode: You are viewing a shared fleet.
+    </div>
+  {:else}
+    <div class="mb-12 text-center">
+      <button on:click={openDialog} class="bg-[#4c5c44] hover:bg-[#3d4a36] border-2 border-stone-900 text-[#e6e4d5] px-10 py-4 rounded-sm font-black uppercase tracking-widest shadow-[4px_4px_0_rgba(28,25,23,1)] text-xl transition-transform active:translate-y-1 active:shadow-none">
+        + Requisition Aircraft
+      </button>
+    </div>
+  {/if}
 
   <div class="space-y-10">
-    {#if $fuselages.length === 0}
+    {#if (isReadOnly ? sharedFuselages : $fuselages).length === 0}
       <div class="text-center text-stone-600 py-16 bg-stone-200 rounded-sm border-2 border-stone-400 border-dashed uppercase tracking-widest font-bold">
-        NO AIRCRAFT DEPLOYED. REQUEST REQUISITION ABOVE.
+        NO AIRCRAFT DEPLOYED.
       </div>
     {/if}
-    {#each $fuselages as fuselage (fuselage.id)}
-      <Fuselage {fuselage} />
+    {#each (isReadOnly ? sharedFuselages : $fuselages) as fuselage (fuselage.id)}
+      <Fuselage {fuselage} {isReadOnly} />
     {/each}
   </div>
 </div>
