@@ -69,13 +69,13 @@
 
   {#if !isReadOnly}
     <!-- Controls -->
-    <div class="p-4 md:p-6 bg-stone-200 flex flex-wrap gap-4 justify-center items-center">
+    <div class="p-4 md:p-5 bg-stone-200 grid grid-cols-2 gap-3">
       {#each markingTypes as {id, emoji, label}}
         <button 
           on:click={() => addMark(id)}
-          class="flex items-center gap-3 bg-stone-300 hover:bg-stone-400 border-2 border-stone-800 text-stone-900 px-6 py-3 rounded-sm font-black uppercase tracking-widest shadow-[3px_3px_0_rgba(28,25,23,1)] transition-transform active:translate-y-1 active:shadow-none"
+          class="flex items-center justify-center gap-2 bg-stone-300 hover:bg-stone-400 border-2 border-stone-800 text-stone-900 px-3 py-2 rounded-sm font-bold uppercase tracking-wider shadow-[2px_2px_0_rgba(28,25,23,1)] transition-transform active:translate-y-[2px] active:shadow-none text-sm md:text-base"
         >
-          <span class="text-2xl leading-none">{emoji}</span>
+          <span class="text-lg md:text-xl leading-none">{emoji}</span>
           <span>Log {label}</span>
         </button>
       {/each}
@@ -83,10 +83,10 @@
       <button 
         on:click={undoMark}
         disabled={allMarkings.length === 0}
-        class="flex items-center gap-2 bg-stone-100 hover:bg-red-100 border-2 border-stone-800 text-stone-800 px-4 py-3 rounded-sm font-bold uppercase tracking-wider shadow-[3px_3px_0_rgba(28,25,23,1)] transition-transform active:translate-y-1 active:shadow-none disabled:opacity-50 disabled:shadow-none disabled:translate-y-1 ml-4"
+        class="flex items-center justify-center gap-2 bg-stone-100 hover:bg-red-100 border-2 border-stone-800 text-stone-800 px-3 py-2 rounded-sm font-bold uppercase tracking-wider shadow-[2px_2px_0_rgba(28,25,23,1)] transition-transform active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:shadow-none disabled:translate-y-[2px] text-sm md:text-base"
         title="Undo Last Mark"
       >
-        <span class="text-xl">↩</span>
+        <span class="text-base md:text-lg">↩</span>
         <span>Undo</span>
       </button>
     </div>
