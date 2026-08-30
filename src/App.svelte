@@ -12,7 +12,7 @@
   let newType = 'green';
   let newGender = 'male';
 
-  $: previewImage = `/plane_${newType}_${newGender}.jpg`;
+  $: previewImage = `plane_${newType}_${newGender}.jpg`;
 
   onMount(() => {
     initDriveAuth((authStatus) => {

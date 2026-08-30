@@ -32,7 +32,7 @@
   $: allMarkings = orderedTypes.map(t => markingTypes.find(m => m.id === t)?.emoji).filter(Boolean);
 
   // Default to green male if older save data doesn't have aircraftType/pilotGender
-  $: bgImage = `/plane_${fuselage.aircraftType || 'green'}_${fuselage.pilotGender || 'male'}.jpg`;
+  $: bgImage = `plane_${fuselage.aircraftType || 'green'}_${fuselage.pilotGender || 'male'}.jpg`;
 </script>
 
 <div class="bg-stone-100 rounded-sm mb-12 relative overflow-hidden border-4 border-stone-800 shadow-[6px_6px_0_rgba(28,25,23,1)]">
