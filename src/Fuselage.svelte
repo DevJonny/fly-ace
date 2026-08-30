@@ -16,12 +16,20 @@
     fuselages.removeFuselage(fuselage.id);
   }
 
-  // Create an array of all markings to display in order on the fuselage
-  $: allMarkings = [
-    ...Array(fuselage.markings?.fly || 0).fill('🪰'),
-    ...Array(fuselage.markings?.wasp || 0).fill('🐝'),
-    ...Array(fuselage.markings?.hornet || 0).fill('🦟')
+  function undoMark() {
+    fuselages.undoLastMarking(fuselage.id);
+  }
+
+  // Use history to display markings in exact chronological order, 
+  // fallback to generating from counts for older saves.
+  $: fallbackMarkings = [
+    ...Array(fuselage.markings?.fly || 0).fill('fly'),
+    ...Array(fuselage.markings?.wasp || 0).fill('wasp'),
+    ...Array(fuselage.markings?.hornet || 0).fill('hornet')
   ];
+  
+  $: orderedTypes = fuselage.history && fuselage.history.length > 0 ? fuselage.history : fallbackMarkings;
+  $: allMarkings = orderedTypes.map(t => markingTypes.find(m => m.id === t)?.emoji).filter(Boolean);
 
   // Default to green male if older save data doesn't have aircraftType/pilotGender
   $: bgImage = `/plane_${fuselage.aircraftType || 'green'}_${fuselage.pilotGender || 'male'}.jpg`;
@@ -54,7 +62,7 @@
   </div>
 
   <!-- Controls -->
-  <div class="p-4 md:p-6 bg-stone-200 flex flex-wrap gap-4 justify-center">
+  <div class="p-4 md:p-6 bg-stone-200 flex flex-wrap gap-4 justify-center items-center">
     {#each markingTypes as {id, emoji, label}}
       <button 
         on:click={() => addMark(id)}
@@ -64,5 +72,15 @@
         <span>Log {label}</span>
       </button>
     {/each}
+    
+    <button 
+      on:click={undoMark}
+      disabled={allMarkings.length === 0}
+      class="flex items-center gap-2 bg-stone-100 hover:bg-red-100 border-2 border-stone-800 text-stone-800 px-4 py-3 rounded-sm font-bold uppercase tracking-wider shadow-[3px_3px_0_rgba(28,25,23,1)] transition-transform active:translate-y-1 active:shadow-none disabled:opacity-50 disabled:shadow-none disabled:translate-y-1 ml-4"
+      title="Undo Last Mark"
+    >
+      <span class="text-xl">↩</span>
+      <span>Undo</span>
+    </button>
   </div>
 </div>

@@ -41,8 +41,38 @@ function createFuselagesStore() {
               ...f,
               markings: {
                 ...f.markings,
-                [type]: (f.markings[type] || 0) + 1
-              }
+                [type]: (f.markings?.[type] || 0) + 1
+              },
+              history: [...(f.history || []), type]
+            };
+          }
+          return f;
+        });
+        triggerSync(newList);
+        return newList;
+      });
+    },
+    undoLastMarking: (id) => {
+      update(list => {
+        const newList = list.map(f => {
+          if (f.id === id) {
+            const history = [...(f.history || [])];
+            const markings = { ...(f.markings || { fly: 0, wasp: 0, hornet: 0 }) };
+            
+            if (history.length > 0) {
+              const lastType = history.pop();
+              markings[lastType] = Math.max(0, (markings[lastType] || 0) - 1);
+            } else {
+              // Fallback for old data without history
+              if (markings.hornet > 0) markings.hornet--;
+              else if (markings.wasp > 0) markings.wasp--;
+              else if (markings.fly > 0) markings.fly--;
+            }
+            
+            return {
+              ...f,
+              markings,
+              history
             };
           }
           return f;
